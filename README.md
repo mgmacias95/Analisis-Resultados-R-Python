@@ -7,11 +7,11 @@ Todo empezó cuando me mandaron hacer una práctica para la univerdad en la que 
 
 * Desarrollar cuatro algoritmos diferentes.
 
-* Ejecutarlos en 20 casos diferentes, desde tamaño $n = 20$ hasta tamaño $n = 256$.
+* Ejecutarlos en 20 casos diferentes, desde tamaño ![equation](http://mathurl.com/hjmwklo.png) hasta tamaño ![equation](http://mathurl.com/z55kw74.png).
 
 * Hacer una documentación explicando el problema a resolver, cada algoritmo desarrollado e incluyendo un pseudocódigo de los mismos.
 
-* Incluir en dicha documentación un estudio estadístico de los resultados, valorando cada algoritmo en función de cómo había trabajado con casos grandes ($n$ grande) o casos pequeños ($n$ pequeño) y de cómo de buenos eran los resultados en comparación con el mejor resultado conocido y con los resultados obtenidos por el resto de algoritmos. Además, incluir gráficas que apoyaran tus conclusiones estaba "muy bien visto" (codo, codo, guiño guiño).
+* Incluir en dicha documentación un estudio estadístico de los resultados, valorando cada algoritmo en función de cómo había trabajado con casos grandes (![equation](http://mathurl.com/2wdwb4o.png) grande) o casos pequeños (![equation](http://mathurl.com/2wdwb4o.png) pequeño) y de cómo de buenos eran los resultados en comparación con el mejor resultado conocido y con los resultados obtenidos por el resto de algoritmos. Además, incluir gráficas que apoyaran tus conclusiones estaba "muy bien visto" (codo, codo, guiño guiño).
 
 y todo esto en unas tres semanas aproximadamente.
 
