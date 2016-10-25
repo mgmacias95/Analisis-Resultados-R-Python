@@ -223,3 +223,35 @@ datos_prueba <- construye_datos(resultados = c("resultados_Ej1.csv","resultados_
     nombres = c("CosteEj1", "TiempoEj1", "DesvEj1","CosteEj2", "TiempoEj2", "DesvEj2"))
 representa_datos(datos=datos_prueba, cols=c(1,2,3,6,9), nombres=c("Coste Ej1", "Coste Ej2), file="prueba")
 ```
+
+Conseguí optimizar tanto el tiempo con estos scripts, que me sobró tiempo para implementar un gráfico de convergencia en R. Para ello, modifiqué mi práctica para que guardase en un `csv` cada coste que iba encontrando, para después representarlo en una gráfica. Una vez comprendida la función anterior, esta no tiene apenas ninguna diferencia:
+
+```r
+representa_convergencia <- function(resultados, nombres, file) {
+    library(ggplot2)
+    library(reshape2)
+    # leemos la convergencia de cada algoritmo
+    convergencias <- lapply(X=resultados, FUN=function(r) read.csv(paste("Resultados/",r,sep="")))
+    # El csv guarda tanto las iteraciones dadas por el algoritmo como el coste
+    # obtenido en cada iteración. Como sólo nos interesa el coste, nos quedamos
+    # con la segunda columna.
+    c <- lapply(X=convergencias, FUN=function(conv) conv[[2]])
+    # hacemos un nuevo data frame con la siguiente estructura:
+    #   Iteraciones    ConvergenciaAlgoritmo 1 ..... ConvergenciaAlgoritmo n  
+    d_c <- data.frame(convergencias[[1]][,1],c)
+    names(d_c) <- nombres
+    d_c
+    # reorganizamos el data frame
+    d_cm <- melt(d_c, id.vars=nombres[1])
+    names(d_cm) <- c(nombres[1], "Algoritmo", "Coste")
+    # lo representamos con ggplot. Hago la distinción de si los datos se han
+    # obtenido por número de llamadas a la función de evaluación o por número de
+    # iteraciones.
+    if (nombres[1] == "Evaluaciones") 
+        ggplot(d_cm, aes(Evaluaciones,Coste)) + geom_line(aes(color=Algoritmo))
+    else
+        ggplot(d_cm, aes(Iteraciones,Coste)) + geom_line(aes(color=Algoritmo))
+    # y lo guardamos.
+    ggsave(paste("conver",file,".png", sep=""))
+}
+```
