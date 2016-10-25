@@ -29,10 +29,10 @@ Llegó el último día que, como tenía clase por la tarde, era en realidad _la 
 
 Así que me dispuse a intentar generar un gráfico en la hoja de cálculo que tenía. Intenté todas las combinaciones posibles de datos, tipos de gráficos, colores, leyendas y demás herramientas que proporciona _Calc_ para hacer gráficos y con ninguna obtenía un buen gráfico que realmente reflejase lo que quería. De hecho, lo más decente que pude obtener fueron dos gráficos que no decían absolutamente nada sobre los datos y que no supe ni siquiera etiquetar... supongo que por los nervios de que la entrega se aproximaba y mi análisis daba pena.
 
-Estos son los gráficos que finalmente incluí en la que iba a ser la chachi documentación extra profesional a 5 minutos de que la entrega se cerrase
+Estos son los gráficos que finalmente incluí en la que iba a ser la chachi documentación extra profesional a 5 minutos de que la entrega se cerrase.
 
 ![Primer gráfico horrible](img/calc1.png "Primer gráfico horrible")
 
 ![Segundo gráfico horrible](img/calc2.png "Segundo gráfico horrible")
 
-¿podéis sacar alguna conclusión de ellos? Yo no.
+¿Podéis sacar alguna conclusión de ellos? Yo no.
