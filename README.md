@@ -76,3 +76,48 @@ def imprime(self):
     print("Desviación = ",self.desv())
     print("Tiempo = ",self.tiempo())
 ```
+
+## Y los gráficos, ¿qué?
+
+Una vez tuve mi script "hoja de cálculo" hecho, pasé a pensar cómo podría automatizar la creación de los gráficos que yo quería. Justo por esa época, @JJ dio una [charla](http://jj.github.io/data-vis/#/) sobre _Visualización de datos con R_ en la que describía el paquete `ggplot2`. El funcionamiento de `ggplot2` es muy sencillo, y permite obtener gráficos muy bonitos e ilustrativos a partir de un _Data frame_. 
+
+Antes de describir el script en R que hice, quiero enseñaros los gráficos que obtuve para que los comparéis con los que obtuve con _Calc_.
+
+![Gráfico que muestra el rendimiento en un caso pequeño](img/chrp1.png "Gráfico que muestra el rendimiento en un caso pequeño")
+
+![Gráfico que muestra el rendimiento en un caso grande](img/taip1.png "Gráfico que muestra el rendimiento en un caso grande")
+
+¿Qué algoritmo funciona mejor en casos pequeños? ¿Y en casos grandes? 
+
+## Mi script con `ggplot2`
+
+### Pasando datos de Python a R
+
+`ggplot2` era ideal, pero tenía un problema: ¿cómo paso mis datos de python a R? La respuesta no fue muy difícil de encontrar. Lo que hice fue añadir una función más a mi script en python que guardaba los datos de la "hoja de cálculo" en un fichero `csv`. Con el fichero `csv` de cada algoritmo, creaba un _Data frame_ en R con los datos que me interesaban para mi gráfica.
+
+```python 
+def csv(self):
+    with open("Resultados/"+self.nombre_csv, 'w') as csvfile:
+        fieldnames = ["Coste","Tiempo","Desviacion"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(len(self.ficheros)):
+            writer.writerow({'Coste':str(self.valores[i]), 
+                'Tiempo':str(self.tiempos[i]), 'Desviacion':str(self.desviaciones[i])})
+    csvfile.close()
+```
+Como también representaba en la gráfica los mejores resultados conocidos para cada caso, hice un `csv` para almacenarlos y poder leerlos con R. Esta función sólo tuve que ejecutarla una vez pues la mejor solución de cada caso es la misma la compares con el algoritmo que la compares.
+
+```python
+def mejor_csv(self):
+    with open("mejor_csv.csv", 'w') as csvfile:
+        fieldnames = ["Caso","Coste"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(len(self.ficheros)):
+            writer.writerow({'Caso':self.ficheros[i].split("/",1)[1], 
+                'Coste':str(self.mejores_sol[i])})
+    csvfile.close()
+```
+
+### Representando en R los datos
