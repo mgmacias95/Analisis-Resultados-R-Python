@@ -89,7 +89,7 @@ Antes de describir el script en R que hice, quiero enseñaros los gráficos que 
 
 ¿Qué algoritmo funciona mejor en casos pequeños? ¿Y en casos grandes?
 
-![Gráfico de convergencia](img/converp2.png, "Gráfico de convergencia")
+![Gráfico de convergencia](img/converp2.png "Gráfico de convergencia")
 
 Este último gráfico lo hice con los datos de la práctica 2, en vez de con los de la práctica 1. Representa la convergencia a una solución, al ser algoritmos multiarranque, pueden llegar a una buena solución y después dar con otra peor. ¿Qué algoritmo da con la mejor solución? ¿Qué algoritmo converge más rápido?
 
