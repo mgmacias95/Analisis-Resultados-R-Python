@@ -87,7 +87,11 @@ Antes de describir el script en R que hice, quiero enseñaros los gráficos que 
 
 ![Gráfico que muestra el rendimiento en un caso grande](img/taip1.png "Gráfico que muestra el rendimiento en un caso grande")
 
-¿Qué algoritmo funciona mejor en casos pequeños? ¿Y en casos grandes? 
+¿Qué algoritmo funciona mejor en casos pequeños? ¿Y en casos grandes?
+
+![Gráfico de convergencia](img/converp2.png, "Gráfico de convergencia")
+
+Este último gráfico lo hice con los datos de la práctica 2, en vez de con los de la práctica 1. Representa la convergencia a una solución, al ser algoritmos multiarranque, pueden llegar a una buena solución y después dar con otra peor. ¿Qué algoritmo da con la mejor solución? ¿Qué algoritmo converge más rápido?
 
 ## Mi script con `ggplot2`
 
@@ -121,3 +125,101 @@ def mejor_csv(self):
 ```
 
 ### Representando en R los datos
+
+Una vez tenía los datos en ficheros `csv` sólo tenía que usar la función `read.csv` para convertirlos en un _Data frame_. En mi caso, como habréis visto en las gráficas, sólo estaba interesada en el coste obtenido por cada algoritmo en casos pequeños y grandes, por lo que obivé los datos relacionados con el tiempo de ejecución.
+
+```r
+# Parámetros de la función:
+#   resultados: nombre de los ficheros csv de cada algoritmo
+#   nombres: nombres de las columnas en el data frame
+construye_datos <- function(resultados, nombres) {
+    # leemos los datos sobre los mejores costes obtenidos para cada caso
+    mejor <- read.csv('Resultados/mejor_csv.csv')
+    # y los costes obtenidos por el algoritmo greedy, este algoritmo se compara
+    # con todos los algoritmos desarrollados en todas las prácticas.
+    greedy <- read.csv('Resultados/resultados_greedy.csv')
+    # leemos el resto de datos de los algoritmos de la práctica concreta
+    algoritmos <- lapply(X=resultados, FUN=function(r) read.csv(paste("Resultados/", r, sep="")))
+    # hacemos un data frame guardando únicamente el coste obtenido por cada
+    # algoritmo.
+    d <- data.frame(cbind(mejor, greedy, algoritmos))
+    names(d) <- c("Caso", "MejorCoste", "CosteGreedy", "TiempoGreedy", "DesvGreedy", nombres)
+    d
+}
+```
+Una vez tenía un _Data frame_ con los datos que quería representar en la gráfica, pasaba a realizar la gráfica con otra función. Debido a que quería representar tres medidas diferentes en la gráfica (__coste__ obtenido por cada __algoritmo__ en algunos de los __casos__), tuve que hacer un tratamiento previo al _Data frame_ para conseguirlo. 
+
+La función `construye_datos` aplicada sobre dos algoritmos _"Ejemplo 1"_ y _"Ejemplo 2"_ nos devuelve un _Data frame_ con la siguiente forma:
+
+| Caso | MejorCoste | CosteGreedy | TiempoGreedy | DesvGreedy | CosteEj1 | TiempoEj1 | DesvEj1 | CosteEj2 | TiempoEj2 | DesvEj2 |
+|:----:|:----------:|:-----------:|:------------:|:----------:|:--------:|:---------:|:-------:|:--------:|:---------:|:-------:|
+|      |            |             |              |            |          |           |         |          |           |         |
+
+De esos datos, como he dicho antes, sólo nos interesan los relativos al coste obtenido para cada caso. Por tanto, el primer "procesamiento" que debemos hacer al _Data frame_ es quedarnos sólo con las columnas que nos interesan:
+
+| Caso | MejorCoste | CosteGreedy | CosteEj1 | CosteEj2 |
+|:----:|:----------:|:-----------:|:--------:|:--------:|
+|      |            |             |          |          |
+
+Una vez hecho esto, tenía que "reorganizar" el _Data frame_ de forma que pasase a tener únicamente 3 columnas, que son las que iba a representar en la gráfica:
+
+|    Caso    |   variable  | value |
+|:----------:|:-----------:|:-----:|
+| chr20a.dat |  MejorCoste |  2192 |
+| chr20c.dat |  MejorCoste | 14142 |
+| chr22b.dat |  MejorCoste |  6194 |
+| chr25a.dat |  MejorCoste |  3796 |
+| chr20a.dat | CosteGreedy |  8100 |
+| chr20c.dat | CosteGreedy | 78718 |
+| chr22b.dat | CosteGreedy | 11942 |
+| chr25a.dat | CosteGreedy | 17556 |
+| chr20a.dat |    CosteEj1 |  2418 |
+| chr20c.dat |    CosteEj1 | 15672 |
+| chr22b.dat |    CosteEj1 |  6530 |
+| chr25a.dat |    CosteEj1 |  4762 |
+| chr20a.dat |    CosteEj2 |  2546 |
+| chr20c.dat |    CosteEj2 | 16986 |
+| chr22b.dat |    CosteEj2 |  6660 |
+| chr25a.dat |    CosteEj2 |  4440 |
+
+Como veis, usando la columna _Caso_ como __identificador__, hemos reordenado la tabla de manera que, para cada algoritmo, tendremos un gráfico de barras representando el coste obtenido en cada caso.
+
+Una vez explicado paso a paso el tratamiento que hice a los datos, paso a enseñar la función que hace la gráfica:
+
+```r
+# Parámetros de la función:
+#   datos: Data frame que devuelve la función constuye_datos
+#   cols: columnas del data frame que vamos a representar en la gráfica 
+#         (en nuestro caso, el coste obtenido por cada algoritmo para cada caso)
+#   nombres: nombres de cada columna del data frame que aparecerán en la gráfica
+#   file: nombre del archivo en el que guardaremos las gráficas finalmente
+representa_datos <- function(datos, cols, nombres, file) {
+    # importación de librerías
+    library(ggplot2)    # para hacer gŕaficos
+    library(reshape2)   # para poder redistribuir el data frame
+    # nos quedamos con las columnas del data frame que nos interesan
+    d_c <- data.frame(cbind(datos[,cols]))
+    names(d_c) <- c("Caso", "Mejor Coste", "Coste Greedy", nombres)
+    d_c$Caso = datos$Caso
+    # filtramos los casos que empiezan por chr2, ya que estos son casos
+    # bastante pequeños y redistribuimos el data frame
+    d_chr <- melt(d_c[grepl("chr2",datos$Caso),])
+    names(d_chr)  <- c("Caso", "Algoritmo", "Coste")
+    # representamos la gráfica de barras
+    ggplot(d_chr, aes(Caso, Coste)) + geom_bar(aes(fill=Algoritmo), position="dodge", stat="identity")
+    # guardamos el archivo
+    ggsave(paste("chr",file,".png",sep=""))
+    # repetimos para casos tai, que son casos grandes.
+    d_tai <- melt(d_c[grepl("tai",datos$Caso),])
+    names(d_tai) <- c("Caso", "Algoritmo", "Coste")
+    ggplot(d_tai, aes(Caso, Coste)) + geom_bar(aes(fill=Algoritmo), position="dodge", stat="identity")
+    ggsave(paste("tai",file,".png",sep=""))
+}
+```
+Por ejemplo, para obtener la gráfica de los algoritmos _"Ejemplo 1"_ y _"Ejemplo 2"_, realizaríamos la siguiente llamada:
+
+```r
+datos_prueba <- construye_datos(resultados = c("resultados_Ej1.csv","resultados_Ej2.csv"),
+    nombres = c("CosteEj1", "TiempoEj1", "DesvEj1","CosteEj2", "TiempoEj2", "DesvEj2"))
+representa_datos(datos=datos_prueba, cols=c(1,2,3,6,9), nombres=c("Coste Ej1", "Coste Ej2), file="prueba")
+```
