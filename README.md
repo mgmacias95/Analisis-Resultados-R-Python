@@ -36,3 +36,45 @@ Estos son los gráficos que finalmente incluí en la que iba a ser la chachi doc
 ![Segundo gráfico horrible](img/calc2.png "Segundo gráfico horrible")
 
 ¿Podéis sacar alguna conclusión de ellos? Yo no.
+
+## Cuello de botella
+
+## Hoja de cálculo
+
+Tras el gran desastre que hice en la primera práctica, me prometí que no me pasaría lo mismo en la segunda. Tras un rato de reflexión, me di cuenta de que mi principal problema fue el tiempo que __gasté__ metiendo datos en la hoja de cálculo a mano e intentando hacer una gráfica medio decente. Tareas tediosas y, sobre todo, que podría haber automatizado con un script. 
+
+Empecé a investigar cómo podría hacer un equivalente a mi hoja de cálculo, pero _exportable_ a LaTeX y sin tener que usar _Calc_. Fue entonces cuando encontré el maravillo paquete de _Python_ llamado `tabulate`. Este paquete, te permite generar a partir de una _lista de listas_ una preciosa tabla en varios formatos (podéis consultarlos en su [documentación](https://pypi.python.org/pypi/tabulate)) entre los que se encontraba `tabular` de LaTeX. 
+
+Tuve la suerte de haber hecho mi práctica en _python_, por lo que añadirle el script que voy a describir a continuación fue pan comido. 
+
+## Mi script con `tabulate`
+
+Si habéis leído la documentación de `tabulate` habréis visto que es bastante sencillo de usar: sólo hay que hacer una lista de listas, donde cada lista de la lista representa una fila de la tabla. En mi caso, la información que tenía que almacenar para cada algoritmo era: 
+
+| Caso | Coste obtenido | Tiempo de ejecución | Desviación |
+|:----:|:--------------:|:-------------------:|:----------:|
+|      |                |                     |            |
+
+La última columna era una forma de reflejar la diferencia del coste obtenido por el algoritmo con el mejor coste obtenido para ese caso del problema.
+
+Mi script consistió en ejecutar todos los casos del algoritmo y guardar dos medidas, en dos listas separadas: tiempo de ejecución y coste de la solución obtenida. De antemano tenía guardados los distintos casos que tenía que ejecutar y las mejores soluciones conocidas de cada algoritmo, que usé para calcular la desviación de cada solución con la siguiente fórmula:
+
+![equation](http://mathurl.com/zzpvyzc.png)
+
+Una vez tenía estos datos, generé la tabla en formato LaTeX consultando las diferentes listas que había creado. 
+
+```python
+def imprime(self):
+    # Calculamos la desviación de cada solución con respecto a la mejor
+    self.calcula_desv()
+    # Generamos cada fila de la tabla accediendo a los datos guardados en cada
+    # una de las listas 
+    table = [[self.ficheros[i], self.valores[i], self.tiempos[i], 
+        self.desviaciones[i]] for i in range(len(self.ficheros))]
+    # Añadimos a la tabla una cabecera para cada columna
+    print(tabulate(table, headers=["Fichero", "Coste", "Tiempo", "Desviación"], 
+        tablefmt="latex"))
+    # Además, calculamos la desviación media y el tiempo medio de ejecución
+    print("Desviación = ",self.desv())
+    print("Tiempo = ",self.tiempo())
+```
