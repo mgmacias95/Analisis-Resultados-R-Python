@@ -1,4 +1,4 @@
-# Análisis de Datos con R y Python
+# Análisis de Resultados con R y Python
 Cómo pasé de analizar resultados con Excel a analizarlos con R+Python
 
 ## Cómo empezó todo...
