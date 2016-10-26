@@ -40,47 +40,9 @@ representa_convergencia <- function(resultados, nombres, file) {
     ggsave(paste("conver",file,".png", sep=""))
 }
 
-# PRACTICA 1
-# datos_p1 <- construye_datos(resultados = c("resultados_localsearch.csv","resultados_simulatedannealing.csv",
-#     "resultados_tabubasic.csv", "resultados_tabuext.csv"), nombres=c("CosteLocalSearch", 
-#     "TiempoLocalSearch", "DesvLS", "CosteSA", "TiempoSA", "DesvSA", "CosteTabuBasica", 
-#     "TiempoTabuBasica", "DesvTB", "CosteTabu", "TiempoTabu", "DesvT"))
-# representa_datos(datos=datos_p1, cols=c(1,2,3,6,9,12,15), nombres=c("Coste Local Search", 
-#     "Coste Simulated Annealing", "Coste Tabú Básica", "Coste Tabú"), file="p1")
 
-# PRACTICA 2
-# datos_p2 <- construye_datos(resultados = c("resultados_multiarranquebasica.csv",
-#     "resultados_grasp.csv", "resultados_ils.csv"), nombres=c("CosteMultBasica", 
-#     "TiempoMultBasica", "DesvMultB", "CosteGrasp", "TiempoGrasp", "DesvGrasp", 
-#     "CosteIls", "TiempoIls", "DesvIls"))
-# representa_datos(datos=datos_p2, cols=c(1,2,3,6,9,12), nombres=c("Coste Multiarranque Básica",
-#     "Coste GRASP", "Coste ILS"), file="p2")
-# print(representa_convergencia(resultados=c("conver_grasp.csv","conver_ils.csv",
-#     "conver_mb.csv"), nombres=c("Iteraciones", "GRASP", "ILS", "MB"), file="p2"))
-
-# PRACTICA 3 
-# datos_p3 <- construye_datos(resultados = c("resultados_EAGEP.csv","resultados_EAGEX.csv",
-#     "resultados_EAGGP.csv", "resultados_EAGGX.csv"), nombres=c("CosteAGEP", 
-#     "TiempoAGEP", "DesvAGEP", "CosteAGEX", "TiempoAGEX", "DesvAGEX", 
-#     "CosteAGGP", "TiempoAGGP", "DesvAGGP", "CosteAGGX", "TiempoAGGX", "DesvAGGX"))
-# representa_datos(datos=datos_p3, cols=c(1,2,3,6,9,12,15), nombres=c("Coste AGEP",
-#     "Coste AGEX", "Coste AGGP", "Coste AGGX"), file="p3")
-# representa_convergencia(resultados=c("conver_AGEP.csv","conver_AGEX.csv",
-#     "conver_AGGP.csv", "conver_AGGX.csv"), nombres=c("Evaluaciones", "AGEP","AGEX","AGGP", 
-#     "AGGX"), file="p3")
-
-# # PRACTICA 4
-# datos_p4 <- construye_datos(resultados = c("resultados_SCH.csv","resultados_SHMM.csv"),
-#     nombres = c("CosteSCH", "TiempoSCH", "DesvSCH","CosteSHMM", "TiempoSHMM", "DesvSHMM"))
-# representa_datos(datos=datos_p4, cols=c(1,2,3,6,9), nombres=c("Coste SCH", "Coste SHMM"),
-#     file="p4")
-# representa_convergencia(resultados=c("conver_SCH.csv","conver_SHMM.csv"), 
-#     nombres=c("Evaluaciones", "SCH", "SHMM"), file="p4")
-
-# PRACTICA 5
-datos_p5 <- construye_datos(resultados = c("resultados_EM1.csv","resultados_EM2.csv", "resultados_EM3.csv"),
-    nombres = c("CosteAM1", "TiempoAM1", "DesvAM1","CosteAM2", "TiempoAM2", "DesvAM2", "CosteAM3", "TiempoAM3", "DesvAM3"))
-representa_datos(datos=datos_p5, cols=c(1,2,3,6,9,12), nombres=c("Coste AM(10,1.0)", "Coste AM(10, 0.1)", "Coste AM(10, 0.1mej)"),
-    file="p5")
-representa_convergencia(resultados=c("conver_M1.csv","conver_M2.csv","conver_M3.csv"), 
-    nombres=c("Evaluaciones", "AM(10,1.0)", "AM(10,0.1)", "AM(10,0.1mej)"), file="p5")
+datos_prueba <- construye_datos(resultados = c("resultados_localsearch.csv"),
+    nombres = c("CosteLS", "TiempoLS", "DesvLS"))
+representa_datos(datos=datos_prueba, cols=c(1,2,3,6), nombres=c("Coste Local Search"), file="prueba")
+# representa_convergencia(resultados=c("conver_M1.csv","conver_M2.csv","conver_M3.csv"), 
+#     nombres=c("Evaluaciones", "AM(10,1.0)", "AM(10,0.1)", "AM(10,0.1mej)"), file="p5")
